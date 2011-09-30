@@ -1,3 +1,0 @@
-<% if tag.present? and well.present? and well.primary_aliquot.present? and not well.primary_aliquot.sample.empty_supplier_sample_name %>
-  <%= select "tag", well.id.to_s  , [[tag.name, tag.id]] | @tags.collect { |t| [t.name, t.id] } %>
-<% end %>

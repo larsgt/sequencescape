@@ -1,2 +1,0 @@
-page["message"].replace_html flash
-flash.discard
