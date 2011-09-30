@@ -5,9 +5,6 @@ class Tag < ActiveRecord::Base
     end
   end
 
-  include Api::TagIO::Extensions
-  cattr_reader :per_page
-  @@per_page = 500
   include Uuid::Uuidable
 
   acts_as_audited :on => [:destroy, :update]

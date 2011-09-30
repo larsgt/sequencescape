@@ -11,7 +11,6 @@ class User < ActiveRecord::Base
   include Swipecardable
   has_many_events
 
-  has_many :lab_events
   has_many :items
   has_many :requests
   has_many :comments

@@ -1,5 +1,4 @@
 class Well < Aliquot::Receptacle
-  include Api::WellIO::Extensions
   include Cherrypick::VolumeByNanoGrams
   include Cherrypick::VolumeByNanoGramsPerMicroLitre
   include Cherrypick::VolumeByMicroLitre
@@ -12,9 +11,8 @@ class Well < Aliquot::Receptacle
 
   contained_by :plate
   delegate :location, :to => :container , :allow_nil => true
-  @@per_page = 500
   has_one :well_attribute
-
+  
   after_create :create_well_attribute_if_not_exists
 
   named_scope :with_blank_samples, { :conditions => { :aliquots => { :samples => { :empty_supplier_sample_name => true } } }, :joins => { :aliquots => :sample } }

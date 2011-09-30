@@ -1,5 +1,4 @@
 class Lane < Aliquot::Receptacle
-  include Api::LaneIO::Extensions
   include LocationAssociation::Locatable
 
   LIST_REASONS_NEGATIVE = [

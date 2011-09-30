@@ -5,9 +5,6 @@ require "tecan_file_generation"
 include Sanger::Robots::Tecan
 
 class Batch < ActiveRecord::Base
-  include Api::BatchIO::Extensions
-  cattr_reader :per_page
-  @@per_page = 500
   include AASM
   include SequencingQcBatch
   include Commentable
@@ -17,7 +14,6 @@ class Batch < ActiveRecord::Base
   
   extend EventfulRecord
   has_many_events
-  has_many_lab_events
 
   DEFAULT_VOLUME = 13
 
@@ -245,23 +241,6 @@ class Batch < ActiveRecord::Base
 
   def display_tags?
     self.multiplexed?
-  end
-
-
-  # Returns meaningful events excluding discriptors/descriptor_fields clutter
-  def formatted_events
-    ev = self.lab_events
-    d = []
-    unless ev.empty?
-      ev.sort_by{ |i| i[:created_at] }.each do |t|
-        if t.descriptors
-          if g = t.descriptor_value("task")
-            d << {"task" => g, "description" => t.description, "message" => t.message, "data" => t.data, "created_at" => t.created_at}
-          end
-        end
-      end
-    end
-    d
   end
 
 

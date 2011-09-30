@@ -1,7 +1,4 @@
 class StudySample < ActiveRecord::Base
-  include Api::StudySampleIO::Extensions
-  cattr_reader :per_page
-  @@per_page = 500
   include Uuid::Uuidable
 
   belongs_to :study

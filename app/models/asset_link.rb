@@ -1,8 +1,5 @@
 class AssetLink < ActiveRecord::Base
-  include Api::AssetLinkIO::Extensions
 
-  cattr_reader :per_page
-  @@per_page = 500
   acts_as_dag_links :node_class_name => 'Asset'
   include Uuid::Uuidable
 

@@ -50,29 +50,13 @@ module Batch::StateMachineBehaviour
   end
 
   def create_complete_batch_event_for(user)
-    lab_events.create!(:batch => self, :user => user, :description => 'Complete').tap do |event|
-      event.add_descriptor Descriptor.new(:name => 'pipeline_id', :value => pipeline.id)
-      event.add_descriptor Descriptor.new(:name => 'pipeline',    :value => pipeline.name)
-      event.save!
-    end
   end
   private :create_complete_batch_event_for
 
   def release_with_user!(user)
     requests.each { |request| pipeline.completed_request_as_part_of_release_batch(request) }
     release_without_user!
-    create_release_batch_event_for(user)
     pipeline.post_release_batch(self, user)
   end
 
-  def create_release_batch_event_for(user)
-    lab_events.create!(:batch => self, :user => user, :description => 'Released').tap do |event|
-      event.add_descriptor Descriptor.new(:name => 'workflow_id', :value => workflow.id)
-      event.add_descriptor Descriptor.new(:name => 'workflow',    :value => "Released from #{workflow.name}")
-      event.add_descriptor Descriptor.new(:name => 'task',        :value => workflow.name)
-      event.add_descriptor Descriptor.new(:name => 'Released',    :value => workflow.name)
-      event.save!
-    end
-  end
-  private :create_release_batch_event_for
-end
+ end

@@ -4,10 +4,6 @@ Factory.sequence :pipeline_name do |n|
   "Pipeline #{n}"
 end
 
-Factory.sequence :lab_workflow_name do |n|
-  "Workflow #{n}"
-end
-
 Factory.sequence :barcode_number do |n|
   "#{n}"
 end
@@ -116,15 +112,8 @@ Factory.define :family do |f|
   f.description           "Something goes here"
   f.relates_to            ""
   f.task                  { |task|     task.association(:task) }
-  f.workflow              { |workflow| workflow.association(:lab_workflow) }
 end
 
-
-Factory.define :lab_workflow_for_pipeline, :class => LabInterface::Workflow do |w|
-  w.name                  {|a| Factory.next :lab_workflow_name }
-  w.item_limit            2
-  w.locale                "Internal"
-end
 
 Factory.define :pipeline, :class => Pipeline do |p|
   p.name                  {|a| Factory.next :pipeline_name }
@@ -135,9 +124,6 @@ Factory.define :pipeline, :class => Pipeline do |p|
   p.location              {|location| location.association(:location)}
   p.request_type          {|request_type| request_type.association(:request_type) }
 
-  p.after_build do |pipeline|
-    pipeline.build_workflow(:name => pipeline.name, :item_limit => 2, :locale => 'Internal') if pipeline.workflow.nil?
-  end
 end
 
 Factory.define :qc_pipeline do |p|
@@ -149,9 +135,6 @@ Factory.define :qc_pipeline do |p|
   p.location              {|location| location.association(:location)}
   p.request_type          {|request_type| request_type.association(:request_type) }
 
-  p.after_build do |pipeline|
-    pipeline.build_workflow(:name => pipeline.name, :locale => 'Internal')
-  end
 end
 
 Factory.define :library_creation_pipeline do |p|
@@ -163,9 +146,6 @@ Factory.define :library_creation_pipeline do |p|
   p.location              {|location| location.association(:location)}
   p.request_type          {|request_type| request_type.association(:request_type) }
 
-  p.after_build do |pipeline|
-    pipeline.build_workflow(:name => pipeline.name, :locale => 'Internal')
-  end
 end
 
 Factory.define :pulldown_library_creation_pipeline do |p|
@@ -177,18 +157,6 @@ Factory.define :pulldown_library_creation_pipeline do |p|
   p.location              {|location| location.association(:location)}
   p.request_type          {|request_type| request_type.association(:request_type) }
 
-  p.after_build do |pipeline|
-    pipeline.build_workflow(:name => pipeline.name, :locale => 'Internal')
-  end
-end
-
-Factory.define :task do |t|
-  t.name                  "New task"
-  t.workflow              {|workflow| workflow.association(:lab_workflow)}
-  t.sorted                nil
-  t.batched               nil
-  t.location              ""
-  t.interactive           nil
 end
 
 Factory.define :pipeline_admin, :class => User do |u|
@@ -198,15 +166,6 @@ Factory.define :pipeline_admin, :class => User do |u|
   u.pipeline_administrator true
 end
 
-Factory.define :lab_workflow, :class => LabInterface::Workflow do |w|
-  w.name                  {|a| Factory.next :lab_workflow_name }
-  w.item_limit            2
-  w.locale                "Internal"
-
-  w.after_create do |workflow|
-    workflow.pipeline = Factory(:pipeline, :workflow => workflow)
-  end
-end
 
 Factory.define :batch_request do |br|
   br.batch                {|batch| batch.association(:batch)}
@@ -315,20 +274,6 @@ Factory.define :sample_tube, :parent => :empty_sample_tube do |sample_tube|
   sample_tube.after_create do |sample_tube|
     sample_tube.aliquots.create!(:sample => Factory(:sample))
   end
-end
-
-Factory.define :cherrypick_task do |t|
-  t.name                  "New task"
-  t.pipeline_workflow_id      {|workflow| workflow.association(:lab_workflow)}
-  t.sorted                nil
-  t.batched               nil
-  t.location              ""
-  t.interactive           nil
-end
-
-Factory.define :assign_plate_purpose_task do |assign_plate_purpose_task|
-  assign_plate_purpose_task.name "Assign a Purpose for Output Plates"
-  assign_plate_purpose_task.sorted 3
 end
 
 Factory.define :plate_purpose do |plate_purpose|

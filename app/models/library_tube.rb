@@ -1,5 +1,4 @@
 class LibraryTube < Tube
-  include Api::LibraryTubeIO::Extensions
   include ModelExtensions::LibraryTube
 
   def is_sequenceable?

@@ -1,2 +1,0 @@
-class PulldownEnrichmentThreePlatePurpose < PlatePurpose
-end

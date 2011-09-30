@@ -4,7 +4,6 @@ class Item < ActiveRecord::Base
   include Workflowed
   extend EventfulRecord
   has_many_events
-  has_many_lab_events
   
   @@cached_requests = nil
 

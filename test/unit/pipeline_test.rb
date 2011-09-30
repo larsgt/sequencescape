@@ -4,8 +4,6 @@ class PipelineTest < ActiveSupport::TestCase
   context "Pipeline" do
     should_have_one  :workflow
     should_have_many :batches, :controls
-    should_have_many :request_information_types, :through => :pipeline_request_information_types
-    should_have_many :pipeline_request_information_types
     #should_require_attributes :name
     
     context "#QC related batches" do

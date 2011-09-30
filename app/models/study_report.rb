@@ -3,8 +3,6 @@ class StudyReport < ActiveRecord::Base
   include DelayedJobEx # add send_later_with_priority. need for delayed job 2.0.x
   class ProcessingError < Exception
   end
-  cattr_reader :per_page
-  @@per_page = 50
   
   has_attached_file :report, :storage => :database
   default_scope select_without_file_columns_for(:report)

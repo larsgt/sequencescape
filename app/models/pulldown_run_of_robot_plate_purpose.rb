@@ -1,2 +1,0 @@
-class PulldownRunOfRobotPlatePurpose < PlatePurpose
-end

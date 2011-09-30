@@ -1,17 +1,13 @@
 class Project < ActiveRecord::Base
-  include Api::ProjectIO::Extensions
   include ModelExtensions::Project
   include Request::Statistics::DeprecatedMethods
 
-  cattr_reader :per_page
-  @@per_page = 500
   include EventfulRecord
   include AASM
   include Uuid::Uuidable
   include Named
   extend EventfulRecord
   has_many_events
-  has_many_lab_events
   
   acts_as_audited :on => [:destroy, :update]
   

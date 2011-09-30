@@ -1,2 +1,0 @@
-class PulldownSonicationPlatePurpose < PlatePurpose
-end

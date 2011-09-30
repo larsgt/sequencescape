@@ -37,8 +37,6 @@ class Submission < ActiveRecord::Base
 
   named_scope :for_studies, lambda {|*args| {:conditions => { :study_id => args[0]} } }
   
-  cattr_reader :per_page
-  @@per_page = 500
   named_scope :including_associations_for_json, { :include => [:uuid_object, {:assets => [:uuid_object] }, { :project => :uuid_object }, { :study => :uuid_object }, :user] }
 
   # Before destroying this instance we should cancel all of the requests it has made
@@ -52,9 +50,6 @@ class Submission < ActiveRecord::Base
   end
   private :cancel_all_requests_on_destruction
   
-  def self.render_class
-    Api::SubmissionIO
-  end
   
   def url_name
     "submission"

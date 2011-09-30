@@ -1,6 +1,5 @@
 class SequenomQcPlate < Plate  
   DEFAULT_SIZE = 384
-  @@per_page   = 50
 
   attr_accessor :gender_check_bypass
   attr_accessor :plate_prefix

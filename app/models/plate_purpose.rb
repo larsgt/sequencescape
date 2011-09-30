@@ -45,9 +45,6 @@ class PlatePurpose < ActiveRecord::Base
     end
   end
 
-  include Api::PlatePurposeIO::Extensions
-  cattr_reader :per_page
-  @@per_page = 500
   include Uuid::Uuidable
 
   # There's a barcode printer type that has to be used to print the labels for this type of plate.

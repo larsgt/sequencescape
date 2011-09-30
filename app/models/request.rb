@@ -2,10 +2,6 @@ class Request < ActiveRecord::Base
   include ModelExtensions::Request
   include Aliquot::DeprecatedBehaviours::Request
 
-  include Api::RequestIO::Extensions
-  cattr_reader :per_page
-  @@per_page = 500
-
   include Uuid::Uuidable
   include AASM
   include AasmExtensions
@@ -17,7 +13,6 @@ class Request < ActiveRecord::Base
 
   extend EventfulRecord
   has_many_events
-  has_many_lab_events
 
   self.inheritance_column = "sti_type"
 
@@ -172,47 +167,6 @@ class Request < ActiveRecord::Base
     self.passed? || self.failed?
   end
 
-  def get_value(request_information_type)
-    return '' unless self.request_metadata.respond_to?(request_information_type.key.to_sym)
-    value = self.request_metadata.send(request_information_type.key.to_sym)
-    return value.to_s if value.blank? or request_information_type.data_type != 'Date'
-    return value.to_date.strftime('%d %B %Y')
-  end
-
-  def value_for(name, batch = nil)
-    rit = RequestInformationType.find_by_name(name)
-    if rit
-      rit_value = self.get_value(rit)
-
-      if rit_value.blank?
-        self.value_for_decriptor(name, batch)
-      else
-        rit_value
-      end
-    else
-      self.value_for_decriptor(name, batch)
-    end
-  end
-
-  def value_for_decriptor(name, batch)
-    desc = nil
-    list = self.lab_events
-    if batch
-      list = self.lab_events_for_batch(batch)
-    end
-    list.each do |event|
-      desc = event.descriptor_value_for(name)
-      unless desc.nil?
-        return desc
-      end
-    end
-    unless desc.nil?
-      desc
-    else
-      ""
-    end
-  end
-
   def mark_in_batch(batch, save_request=true)
     # =================
     # WARNING, this method should be called in batch#create_request but is "inlined" there instead (for performance reasons)
@@ -221,15 +175,6 @@ class Request < ActiveRecord::Base
     # To ensure that the request isn't still viewable in the inbox.
     self.state = "started"
     self.save if save_request
-  end
-
-  def has_passed(batch, task)
-    self.lab_events_for_batch(batch).each do |event|
-      if event.description == task.name
-        return true
-      end
-    end
-    false
   end
 
   def lab_events_for_batch(batch)

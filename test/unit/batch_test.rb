@@ -4,7 +4,6 @@ class BatchTest < ActiveSupport::TestCase
   def setup
     @pipeline = Pipeline.create!(
       :name => 'Test pipeline',
-      :workflow => LabInterface::Workflow.create!(:item_limit => 8),
       :request_type => RequestType.create!(:request_class => Request, :order => 1)
     )
   end
@@ -27,7 +26,6 @@ class BatchTest < ActiveSupport::TestCase
       end
       context "workflow is internal and released?" do
         setup do
-          @pipeline.workflow.update_attributes!(:locale => 'Internal')
         end
     
         should "initially not be #externally_released? then be #externally_released?" do
@@ -39,7 +37,6 @@ class BatchTest < ActiveSupport::TestCase
     
       context "workflow is external and released?" do
         setup do
-          @pipeline.workflow.update_attributes!(:locale => 'External')
         end
     
         should "initially not be #internally_released? then be #internally_released? and return the pipelines first workflow" do

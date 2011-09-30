@@ -1,2 +1,0 @@
-class PulldownSequenceCapturePlatePurpose < PlatePurpose
-end

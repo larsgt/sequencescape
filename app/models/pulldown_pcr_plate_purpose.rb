@@ -1,2 +1,0 @@
-class PulldownPcrPlatePurpose < PlatePurpose
-end

@@ -1,5 +1,4 @@
 class SampleTube < Tube
-  include Api::SampleTubeIO::Extensions
   include ModelExtensions::SampleTube
   include StandardNamedScopes
 

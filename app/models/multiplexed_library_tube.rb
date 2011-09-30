@@ -1,6 +1,5 @@
 class MultiplexedLibraryTube < Tube
   include ModelExtensions::MultiplexedLibraryTube
-  include Api::MultiplexedLibraryTubeIO::Extensions
   include Transfer::Associations
 
   # Default states for MX library tubes is pending, always.

@@ -1,5 +1,4 @@
 class Plate < Asset
-  include Api::PlateIO::Extensions
   include ModelExtensions::Plate
   include LocationAssociation::Locatable
   include Transfer::Associations
@@ -118,8 +117,6 @@ class Plate < Asset
   #has_many :wells, :as => :holder, :class_name => "Well"
   DEFAULT_SIZE = 96
   self.prefix = "DN"
-  cattr_reader :per_page
-  @@per_page = 50
 
   before_create :set_plate_name_and_size
 

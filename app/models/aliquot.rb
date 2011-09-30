@@ -105,7 +105,6 @@ class Aliquot < ActiveRecord::Base
     end
   end
 
-  include Api::AliquotIO::Extensions
   # An aliquot is held within a receptacle
   belongs_to :receptacle, :class_name => 'Asset'
   validates_presence_of :receptacle

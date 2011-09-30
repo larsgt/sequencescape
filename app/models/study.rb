@@ -4,9 +4,6 @@ class Study < ActiveRecord::Base
   include StudyReport::StudyDetails
   include ModelExtensions::Study
 
-  include Api::StudyIO::Extensions
-  cattr_reader :per_page
-  @@per_page = 500
   include Uuid::Uuidable
 
   include EventfulRecord
@@ -21,7 +18,6 @@ class Study < ActiveRecord::Base
 
   extend EventfulRecord
   has_many_events
-  has_many_lab_events
   
   acts_as_authorizable
 

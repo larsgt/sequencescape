@@ -24,8 +24,6 @@ class Asset < ActiveRecord::Base
   class_inheritable_accessor :prefix
   self.prefix = "NT"
   
-  cattr_reader :per_page
-  @@per_page = 500
   self.inheritance_column = "sti_type"
   #acts_as_paranoid
 #  validates_uniqueness_of :name
@@ -93,7 +91,6 @@ class Asset < ActiveRecord::Base
     event_constructor(:update_gender_markers!,         Event::SequenomLoading,        :created_update_gender_makers!)
     event_constructor(:update_sequenom_count!,         Event::SequenomLoading,        :created_update_sequenom_count!)
   end
-  has_many_lab_events
 
   has_one_event_with_family 'scanned_into_lab'
   has_one_event_with_family 'moved_to_2d_tube'

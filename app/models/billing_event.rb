@@ -5,9 +5,6 @@
 #
 # The primary interface is intended for remote invocation via the Projects::BillingEventsController
 class BillingEvent < ActiveRecord::Base
-  include Api::BillingEventIO::Extensions
-  cattr_reader :per_page
-  @@per_page = 500
   include Uuid::Uuidable
 
 

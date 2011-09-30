@@ -1,10 +1,7 @@
 require 'rexml/text'
 class Sample < ActiveRecord::Base
   include ModelExtensions::Sample
-  include Api::SampleIO::Extensions
 
-  cattr_reader :per_page
-  @@per_page = 500
   include ExternalProperties
   include Identifiable
   include Uuid::Uuidable
@@ -18,7 +15,6 @@ class Sample < ActiveRecord::Base
     event_constructor(:updated_using_sample_manifest!, Event::SampleManifestEvent, :updated_sample!)
   end
   
-  has_many_lab_events
 
   ArrayExpressFields = %w(genotype phenotype strain_or_line developmental_stage sex cell_type disease_state compound dose immunoprecipitate growth_condition rnai organism_part species time_point)
   EgaFields = %w(subject disease treatment)
