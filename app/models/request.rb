@@ -407,6 +407,29 @@ class Request < ActiveRecord::Base
     self.project.has_quota?(request_type, 1)
   end
 
+  # This method should be used if a request is in two batches
+  # Create new requests for other batches
+  def split_from_batches
+    self.transaction do 
+      duplicated_batches = self.batch_requests[0, self.batch_requests.size-1]
+      duplicated_batches.each do |br| 
+        if br.batch.nil?
+           # Batch removed but not BatchRequest
+           br.destroy
+           next
+        end
+        new = self.class.create!(self.attributes) do |copy|
+          # Create a copy of the asset
+          copy.create_request_metadata(self.request_metadata.attributes)
+        end
+        self.events.create!({:message => "Removed from batch #{br.batch_id}"})
+        new.events.create!({:message => "Created as duplicate of Request #{self.id} in Batch #{br.batch_id}"})
+        br.request = new
+        br.save!
+      end
+    end
+  end
+
   extend Metadata
   has_metadata do
     # TODO[xxx]: Until we know exactly what to do with these they live here.
