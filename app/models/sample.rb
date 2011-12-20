@@ -197,7 +197,7 @@ class Sample < ActiveRecord::Base
 
   def accession_service
     return nil if self.studies.empty?
-    self.studies.first.accession_service
+    self.studies.last.accession_service
   end
 
   # at the moment return a string which is a comma separated list of snp plate id
@@ -353,7 +353,7 @@ class Sample < ActiveRecord::Base
 
   def validate_ena_required_fields!
     # Do not alter the order of this line, otherwise @ena_study won't be set correctly!
-    @ena_study, self.validating_ena_required_fields = self.studies.first, true
+    @ena_study, self.validating_ena_required_fields = self.studies.last, true
     self.valid? or raise ActiveRecord::RecordInvalid, self
   rescue ActiveRecord::RecordInvalid => exception
     @ena_study.errors.full_messages.each do |message|
